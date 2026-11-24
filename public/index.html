@@ -67,10 +67,16 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ prompt: promptInput, affiliateLink: affLinkInput })
                 });
+                
                 const data = await res.json();
-                output.innerText = data.result || data.error || 'Terjadi kesalahan.';
+
+                if (res.ok) {
+                    output.innerText = data.result;
+                } else {
+                    output.innerText = 'Error Server: ' + (data.error || 'Terjadi kesalahan pada server Vercel.');
+                }
             } catch(e) {
-                output.innerText = 'Gagal terhubung ke server Vercel.';
+                output.innerText = 'Gagal terhubung ke server Vercel: ' + e.message;
             } finally {
                 btn.disabled = false;
                 btn.innerText = '⚡ Buatkan Naskah & Paket Posting';
